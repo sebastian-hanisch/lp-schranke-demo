@@ -157,7 +157,7 @@ st.markdown(
 | Annahme | Was passiert, wenn sie verletzt ist | Wer setzt an |
 |---|---|---|
 | **Der aufgerundete LP-Wert trifft das Optimum** | In der Literatur gibt es Instanzen, bei denen das Optimum darüber liegt (Suchtreffer, ab etwa zehn Paketen); die Suche dieser Demo hat in zufälligen kleinen Instanzen keine gefunden, das beweist nichts für gezielt gebaute. | - |
-| **Nur L1, L2 und der LP-Wert** | Stärkere Schranken sind nicht gemessen; wie viele der 10 Fälle im Raster, die offen bleiben, sie entscheiden würden, ist unbekannt. | spätere Stücke dieser Reihe |
+| **Nur L1, L2 und der LP-Wert** | Stärkere Schranken sind nicht gemessen; wie viele der 8 Fälle im Raster, die offen bleiben, sie entscheiden würden, ist unbekannt. | spätere Stücke dieser Reihe |
 | **Der LP-Wert ist berechenbar** | Live rechnet die Demo ihn bis 12 Pakete mit allen Mustern; bei 20 und 30 Paketen stammt er aus einem Generator mit Spaltenerzeugung, die diese Demo nicht erklärt. | [Exakte Suche](https://sebastianhanisch.net/konzepte-exakte-suche.html) |
 | **Die Pakete sind zufällig und gleichverteilt** | Gezielt gebaute Instanzen verhalten sich anders (etwa Triplets: Dort kennt schon L1 das Optimum). | Stück 3 dieser Reihe |
 """
@@ -183,15 +183,15 @@ with st.expander("📐 Mathematische Formulierung"):
 | $\mathrm{LP}$ | LP-Wert |
 | $\mathrm{OPT}$, $\mathrm{FFD}$ | Optimum, Containerzahl von FFD |
 
-**LP-Schranke** (Gilmore und Gomory). $\mathrm{LP} = \min \sum_{p \in \mathcal{P}} x_p$ unter $\sum_{p \ni i} x_p \ge 1$ für jedes Paket $i$ und $x_p \ge 0$. Jede Packung ist eine Lösung mit $x_p \in \{0, 1\}$, also gilt $L_1 \le \mathrm{LP} \le \mathrm{OPT} \le \mathrm{FFD}$ und, weil $\mathrm{OPT}$ ganz ist, $\lceil \mathrm{LP} \rceil \le \mathrm{OPT}$.
+**LP-Schranke** (Gilmore und Gomory). $\mathrm{LP} = \min \sum_{p \in \mathcal{P}} x_p$ unter $\sum_{p \ni i} x_p \ge 1$ für jedes Paket $i$ und $x_p \ge 0$. Jede Packung ist eine Lösung mit $x_p \in \{0, 1\}$, also gilt $\sum_i s_i / C \le \mathrm{LP} \le \mathrm{OPT} \le \mathrm{FFD}$ und, weil $\mathrm{OPT}$ ganz ist, $L_1 \le \lceil \mathrm{LP} \rceil \le \mathrm{OPT}$ (der ungerundete LP-Wert kann unter $L_1$ liegen, etwa bei vier Paketen der Größe 3 und $C = 10$).
 
 **Dualzertifikat.** Das duale Programm $\max \sum_i y_i$ unter $\sum_{i \in p} y_i \le 1$ für jedes Muster $p$ und $y \ge 0$ hat denselben Wert. Jedes zulässige $y$ beweist eine untere Schranke; die Tests der Demo prüfen es an den Beispielen.
 
 **Beispiel (4, 4, 4, 4, 3), $C = 10$.** Muster sind $\{4,4\}$ (Summe 8), $\{4,3\}$ (7) und Einzelpakete. Die 3 braucht ein Muster mit ihr: Gewicht mindestens 1 auf $\{4,3\}$ (das deckt auch eine Vier); die übrigen drei Vieren deckt $\{4,4\}$ mit Gewicht $1{,}5$: $\mathrm{LP} = 1 + 1{,}5 = 2{,}5$, aufgerundet $3$. FFD braucht 3 Container, also ist FFD bewiesen optimal, obwohl $L_1 = L_2 = 2$.
 
-**Rundung.** Dass $\mathrm{OPT} = \lceil \mathrm{LP} \rceil$ gilt (Rundungseigenschaft), ist in den Messungen dieser Demo immer so, aber nicht allgemein: Aus der Literatur (Suchtreffer, Originale nicht gelesen) sind Instanzen mit $\mathrm{OPT} > \lceil \mathrm{LP} \rceil$ bekannt, die kleinsten ab etwa zehn Paketen, und die größte bekannte Lücke $\mathrm{OPT} - \mathrm{LP}$ liegt bei etwa 1,1.
+**Rundung.** Dass $\mathrm{OPT} = \lceil \mathrm{LP} \rceil$ gilt (Rundungseigenschaft), ist in allen Messungen dieser Demo so, in denen das Optimum bekannt ist (im Raster sind 8 Instanzen unentschieden), aber nicht allgemein: Aus der Literatur (Suchtreffer, Originale nicht gelesen) sind Instanzen mit $\mathrm{OPT} > \lceil \mathrm{LP} \rceil$ bekannt, die kleinsten ab etwa zehn Paketen, und die größte bekannte Lücke $\mathrm{OPT} - \mathrm{LP}$ liegt bei etwa 1,1.
 
-**Wie die Demo rechnet.** Bis 12 Pakete mit allen Mustern (höchstens $2^{12} - 1$ Spalten) und dem Löser HiGHS (`scipy.optimize.linprog`); die Muster der Anzeige sind nach den Größen der Pakete zusammengefasst. Bei 20 und 30 Paketen stammt der Wert aus einem Generator mit Spaltenerzeugung (Preisproblem: unbeschränkter Rucksack per DP).
+**Wie die Demo rechnet.** Bis 12 Pakete mit allen Mustern (höchstens $2^{12} - 1$ Spalten) und dem Löser HiGHS (`scipy.optimize.linprog`); die Muster der Anzeige sind nach den Größen der Pakete zusammengefasst. Bei 20 und 30 Paketen stammt der Wert aus einem Generator mit Spaltenerzeugung (Preisproblem: beschränkter Rucksack per DP, jedes Paket höchstens einmal).
         """
     )
 

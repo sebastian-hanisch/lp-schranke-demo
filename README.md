@@ -11,7 +11,7 @@ L1 und L2 beweisen FFD in vielen Fällen nicht, obwohl es optimal ist. Die LP-Sc
 
 ## Modell
 
-Ganzzahlige Paketgrößen s₁ … sₙ mit 1 ≤ sᵢ ≤ C, Container der Kapazität C, alle Pakete vorab bekannt. **Muster:** eine Teilmenge der Pakete mit Summe höchstens C. **LP-Wert:** kleinste Summe der Mustergewichte (Gewichte dürfen Brüche sein), sodass jedes Paket mindestens einmal überdeckt ist (Gilmore und Gomory). Jede Packung ist eine Lösung mit ganzen Gewichten, also gilt L₁ ≤ LP ≤ OPT ≤ FFD und aufgerundet ⌈LP⌉ ≤ OPT. **Ausgänge je Instanz:** *durch L1 bewiesen* (FFD = L₁), *erst durch L2* (FFD = L₂ > L₁), *erst durch LP* (FFD = ⌈LP⌉ über L₂), *LP trifft das Optimum* (⌈LP⌉ = FFD − 1, und eine Packung mit FFD − 1 Containern existiert), *nicht entschieden* (⌈LP⌉ = FFD − 1, ob eine solche Packung existiert, ist offen), *Rundung verletzt* (⌈LP⌉ = FFD − 1, aber keine Packung mit FFD − 1 Containern: das Optimum liegt über dem aufgerundeten LP-Wert) und *LP mehr als 1 unter FFD*. Formeln im Expander 📐 der App.
+Ganzzahlige Paketgrößen s₁ … sₙ mit 1 ≤ sᵢ ≤ C, Container der Kapazität C, alle Pakete vorab bekannt. **Muster:** eine Teilmenge der Pakete mit Summe höchstens C. **LP-Wert:** kleinste Summe der Mustergewichte (Gewichte dürfen Brüche sein), sodass jedes Paket mindestens einmal überdeckt ist (Gilmore und Gomory). Jede Packung ist eine Lösung mit ganzen Gewichten, also gilt Σsᵢ/C ≤ LP ≤ OPT ≤ FFD und aufgerundet L₁ ≤ ⌈LP⌉ ≤ OPT (der ungerundete LP-Wert kann unter L₁ liegen). **Ausgänge je Instanz:** *durch L1 bewiesen* (FFD = L₁), *erst durch L2* (FFD = L₂ > L₁), *erst durch LP* (FFD = ⌈LP⌉ über L₂), *LP trifft das Optimum* (⌈LP⌉ = FFD − 1, und eine Packung mit FFD − 1 Containern existiert), *nicht entschieden* (⌈LP⌉ = FFD − 1, ob eine solche Packung existiert, ist offen), *Rundung verletzt* (⌈LP⌉ = FFD − 1, aber keine Packung mit FFD − 1 Containern: das Optimum liegt über dem aufgerundeten LP-Wert) und *LP mehr als 1 unter FFD*. Formeln im Expander 📐 der App.
 
 ## Methodik
 
@@ -40,7 +40,7 @@ Alle Zahlen sind Messungen an den Instanzen dieser Demo (feste Seeds), nachgerec
 
 - Von den 900 Instanzen sind 431 durch L1 bewiesen, 340 erst durch L2; **129 bleiben offen** (FFD über L1 und L2). Die Aufteilung gleicht der in Stück 2.
 - **Von den 129 offenen Instanzen beweist der aufgerundete LP-Wert bei 66 die Optimalität von FFD** (in jeder von ihnen liegt der aufgerundete LP-Wert über L2). Bei **55** ist der aufgerundete LP-Wert gleich dem Optimum und FFD braucht genau einen Container mehr. **8** sind nicht entschieden (7 bei mittleren Teilen mit n = 30, 1 bei breiten Teilen mit n = 30): dort liegt der aufgerundete LP-Wert einen Container unter FFD, und das ganzzahlige Programm hat in 60 Sekunden weder eine Packung mit einem Container weniger gefunden noch ihre Nichtexistenz bewiesen.
-- **Die Rundung ist in keiner Instanz verletzt** (0 von 129), und in keiner liegt der aufgerundete LP-Wert mehr als einen Container unter FFD.
+- **Die Rundung ist in keiner der 121 entschiedenen Instanzen verletzt** (0 von 121; bei den 8 nicht entschiedenen ist offen, ob das Optimum über dem aufgerundeten LP-Wert liegt), und in keiner liegt der aufgerundete LP-Wert mehr als einen Container unter FFD.
 - **Dominanz über L2:** Der aufgerundete LP-Wert liegt in **0 von 900** Instanzen unter L2 und in 66 darüber. (Bei den 431 Instanzen mit FFD = L1 folgt das aus L₁ ≤ ⌈LP⌉ ≤ FFD ohne Rechnung.)
 - **Mittlere Teile:** L2 beweist in 0 von 300 Instanzen mehr als L1, der LP-Wert in 10 von 300 zusätzlich.
 

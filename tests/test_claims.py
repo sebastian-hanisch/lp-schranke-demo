@@ -105,7 +105,7 @@ def test_gesamtzahlen_der_900_instanzen():
     assert "sind 431 durch L1 bewiesen, 340 erst durch L2; **129 bleiben offen**" in README
     assert (s["lp_beweist"], s["lp_scharf"], s["offen_unentschieden"]) == (66, 55, 8) and s["lp_beweist"] + s["lp_scharf"] + s["offen_unentschieden"] == 129
     assert "beweist der aufgerundete LP-Wert bei 66 die Optimalität von FFD**" in README and "Bei **55** ist der aufgerundete LP-Wert gleich dem Optimum" in README and "**8** sind nicht entschieden" in README
-    assert s["rundung_verletzt"] == 0 and s["lp_weit_unter"] == 0 and "**Die Rundung ist in keiner Instanz verletzt** (0 von 129)" in README
+    assert s["rundung_verletzt"] == 0 and s["lp_weit_unter"] == 0 and "**Die Rundung ist in keiner der 121 entschiedenen Instanzen verletzt** (0 von 121;" in README and offen - s["offen_unentschieden"] == 121
     assert s["unter_l2"] == 0 and s["ueber_l2"] == 66 == s["lp_beweist"] and "unter L2 und in 66 darüber" in README and "**0 von 900**" in README
 
 
@@ -158,6 +158,13 @@ def test_readme_beispieltabelle_und_handrechnung():
         zeile = f"| {C.BEISPIEL_NAMEN[i]} | {sum(a.inst.sizes)} | {a.ffd} | {a.schranke_l1} | {a.schranke_l2} | {str(round(a.lp['wert'], 4)).replace('.', ',')} | {a.lp_zahl} | {a.opt} | {namen[a.ausgang]} |"
         assert zeile in README, zeile
     assert "LP = 1 + 1,5 = **2,5**, aufgerundet 3" in README and "ist der LP-Wert 36/7 ≈ 5,1429" in README
+
+
+def test_ungerundeter_lp_wert_kann_unter_l1_liegen():
+    """Das Gegenbeispiel zu „L1 ≤ LP“ (README, Formel-Expander): vier Pakete der Größe 3, C = 10."""
+    lp = A.lp_loesen((3, 3, 3, 3), 10)["wert"]
+    assert abs(lp - 4 / 3) < 1e-9 and A.l1((3, 3, 3, 3), 10) == 2 and lp < 2 <= A.lp_aufgerundet(lp)
+    assert "(der ungerundete LP-Wert kann unter L₁ liegen)" in README
 
 
 def test_annahmen_text_der_app_steht_woertlich_in_der_readme():
